@@ -207,6 +207,11 @@ public class XAttributeTimestampImpl extends XAttributeImpl implements
 	}
 
 	@Override
+	public int hashCode() {
+		return super.hashCode() ^ value.hashCode();
+	}
+
+	@Override
 	public int compareTo(XAttribute other) {
 		if (!(other instanceof XAttributeTimestamp)) {
 			throw new ClassCastException();

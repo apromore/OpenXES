@@ -309,7 +309,9 @@ public class XExtensionManager {
 		try (BufferedInputStream bis = new BufferedInputStream(uri.toURL()
                                         .openStream())) {
 			byte[] buffer = new byte[1024];
-			cacheFile.createNewFile();
+			if (!cacheFile.createNewFile()) {
+				throw new IOException("Unable to create cache file " + cacheFile);
+			}
 			try (BufferedOutputStream bos = new BufferedOutputStream(
 					new FileOutputStream(cacheFile))) {
 			    int read = bis.read(buffer);

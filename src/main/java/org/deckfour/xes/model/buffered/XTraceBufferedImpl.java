@@ -159,6 +159,11 @@ public class XTraceBufferedImpl implements XTrace {
 		// i1 empty or i2 empty, hence i1 empty and i2 empty (as #i1 == #i2).
 		return true;
 	}
+
+	@Override
+	public int hashCode() {
+		return events.hashCode();
+	}
 	
 	/*
 	 * (non-Javadoc)
@@ -540,8 +545,7 @@ public class XTraceBufferedImpl implements XTrace {
 		try {
 			clone = (XTraceBufferedImpl) super.clone();
 		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-			return null;
+			throw new Error("Unable to clone trace", e);
 		}
 		clone.attributes = (XAttributeMap) attributes.clone();
 		clone.events = (XFastEventList) events.clone();

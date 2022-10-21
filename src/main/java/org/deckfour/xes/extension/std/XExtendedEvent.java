@@ -391,8 +391,7 @@ public class XExtendedEvent implements XEvent {
 			clone.original = (XEvent) original.clone();
 			return clone;
 		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-			return null;
+			throw new Error("Event cannot be cloned: " + id, e);
 		}
 	}
 

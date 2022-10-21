@@ -495,7 +495,10 @@ public class NikeFS2RandomAccessStorageImpl implements NikeFS2RandomAccessStorag
 		public String readSafeUTF() throws IOException {
 			int size = super.readInt();
 			byte[] bytes = new byte[size];
-			super.read(bytes);
+			int byteCount = super.read(bytes);
+			if (byteCount != size) {
+				throw new IOException("Expected " + size + " bytes, got " + byteCount);
+			}
 			return new String(bytes);
 		}
 		

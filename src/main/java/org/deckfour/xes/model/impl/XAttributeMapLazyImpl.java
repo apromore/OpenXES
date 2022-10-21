@@ -228,7 +228,7 @@ public class XAttributeMapLazyImpl<T extends XAttributeMap> implements XAttribut
 				backingStore = backingStoreClass.newInstance();
 			} catch (Exception e) {
 				// Fuckup
-				e.printStackTrace();
+				throw new Error("Unable to create backing store", e);
 			}
 		}
 		return backingStore.put(key, value);
@@ -244,7 +244,7 @@ public class XAttributeMapLazyImpl<T extends XAttributeMap> implements XAttribut
 					backingStore = backingStoreClass.newInstance();
 				} catch (Exception e) {
 					// Fuckup
-					e.printStackTrace();
+					throw new Error("Unable to create backing store", e);
 				}
 			}
 			backingStore.putAll(t);
@@ -298,8 +298,7 @@ public class XAttributeMapLazyImpl<T extends XAttributeMap> implements XAttribut
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			// Fuckup!
-			e.printStackTrace();
-			return null;
+			throw new Error("Unable to clone", e);
 		}
 	}
 

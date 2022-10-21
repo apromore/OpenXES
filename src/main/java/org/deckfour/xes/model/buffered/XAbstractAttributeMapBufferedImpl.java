@@ -348,12 +348,8 @@ public abstract class XAbstractAttributeMapBufferedImpl implements XAttributeMap
 			XAbstractAttributeMapBufferedImpl clone = (XAbstractAttributeMapBufferedImpl)super.clone();
 			clone.storage = storage.copy();
 			return clone;
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+		} catch (CloneNotSupportedException | IOException e) {
+			throw new Error("Unable to clone", e);
 		}
 	}
 

@@ -292,6 +292,11 @@ public class XEventClasses {
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		return classifier.hashCode();
+	}
+
 	public String toString() {
 		return "Event classes defined by " + classifier.name();
 	}

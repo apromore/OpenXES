@@ -426,27 +426,24 @@ public class XFastEventList implements Cloneable {
 	 * Creates a clone of this list.
 	 */
 	public synchronized Object clone() {
-		// consolidate first
 		try {
+			// consolidate first
 			this.consolidate();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+
+			// start cloning
+			XFastEventList clone = (XFastEventList) super.clone();
+
+			// clone back buffer explicitly
+			clone.buffer = (XSequentialEventBuffer) buffer.clone();
+			clone.holeFlags= (BitSet) holeFlags.clone();
+			clone.overflowEntries = overflowEntries.clone();
+			clone.overflowIndices = overflowIndices.clone();
+
+			return clone;
+
+		} catch (CloneNotSupportedException | IOException e) {
+			throw new Error("Unable to clone", e);
 		}
-		// start cloning
-		XFastEventList clone = null;
-		try {
-			clone = (XFastEventList) super.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-			return null;
-		}
-		// clone back buffer explicitly
-		clone.buffer = (XSequentialEventBuffer) buffer.clone();
-		clone.holeFlags= (BitSet) holeFlags.clone();
-		clone.overflowEntries = overflowEntries.clone();
-		clone.overflowIndices = overflowIndices.clone();
-		return clone;
 	}
 
 	/*

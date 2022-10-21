@@ -62,6 +62,7 @@ package org.deckfour.xes.nikefs2;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This class provides static facilities to acquire and manage temporary swap files.
@@ -73,6 +74,7 @@ import java.io.IOException;
  * @author Christian W. Guenther (christian@deckfour.org)
  *
  */
+@Slf4j
 public class NikeFS2SwapFileManager {
 	
 	/**
@@ -151,10 +153,14 @@ public class NikeFS2SwapFileManager {
 			// create swap directory for this instance
 			File swapDir = File.createTempFile(SWAP_DIR_PREFIX, SWAP_DIR_SUFFIX, TMP_DIR);
 			// delete if created
-			swapDir.delete();
+			if (!swapDir.delete()) {
+				log.warn("Failed to delete swap directory {}", swapDir);
+			}
 			// create lock file
 			File lockFile = new File(TMP_DIR, swapDir.getName() + LOCK_FILE_SUFFIX);
-			lockFile.createNewFile();
+			if (!lockFile.createNewFile()) {
+				throw new IOException("Unable to create lock file " + lockFile);
+			}
 			// delete lock file on exit, to make swap directory 
 			// eligible for cleanup.
 			lockFile.deleteOnExit();
@@ -190,8 +196,7 @@ public class NikeFS2SwapFileManager {
 				cleanedFiles += deleteRecursively(swapDir);
 			}
 		}
-		System.out.println("NikeFS2: cleaned up " + cleanedFiles + 
-				" stale swap files (from " + cleanedDirs + " sessions).");
+		log.info("NikeFS2: cleaned up {} stale swap files (from {} sessions).", cleanedFiles, cleanedDirs);
 	}
 	
 	/**
@@ -209,7 +214,9 @@ public class NikeFS2SwapFileManager {
 		} else {
 			deleted++;
 		}
-		directory.delete();
+		if (!directory.delete()) {
+			log.warn("Unable to delete directory {}", directory);
+		}
 		return deleted;
 	}
 

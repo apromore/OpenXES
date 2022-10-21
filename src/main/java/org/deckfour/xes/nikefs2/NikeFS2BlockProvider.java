@@ -135,7 +135,9 @@ public class NikeFS2BlockProvider {
 			this.blockSize = blockSize;
 			// create backing file, if not present yet
 			if(storage.exists()==false) {
-				storage.createNewFile();
+				if (!storage.createNewFile()) {
+					throw new IOException("Unable to create storage file " + storage);
+				}
 			}
 			// wrap backing file in random access file
 			this.file = storage;
@@ -268,7 +270,7 @@ public class NikeFS2BlockProvider {
 	 */
 	public synchronized int read(int blockNumber, int blockOffset, byte[] buffer, int bufferOffset, int length) 
 			throws IOException {
-		long pointer = getBlockOffset(blockNumber) + blockOffset;
+		int pointer = getBlockOffset(blockNumber) + blockOffset;
 		int readable = blockSize - blockOffset;
 		int readLength = length;
 		if(readable < length) {
@@ -276,7 +278,7 @@ public class NikeFS2BlockProvider {
 		}
 		if(mapped == true) {
 			MappedByteBuffer map = NikeFS2FileAccessMonitor.instance().requestMap(this);
-			map.position((int)pointer);
+			map.position(pointer);
 			map.get(buffer, bufferOffset, readLength);
 			return readLength;
 		} else {
@@ -294,10 +296,10 @@ public class NikeFS2BlockProvider {
 	 */
 	public synchronized int read(int blockNumber, int blockOffset) 
 			throws IOException {
-		long pointer = getBlockOffset(blockNumber) + blockOffset;
+		int pointer = getBlockOffset(blockNumber) + blockOffset;
 		if(mapped == true) {
 			MappedByteBuffer map = NikeFS2FileAccessMonitor.instance().requestMap(this);
-			map.position((int)pointer);
+			map.position(pointer);
 			int result = map.get();
 			return result + 128;
 		} else {
@@ -329,7 +331,7 @@ public class NikeFS2BlockProvider {
 	 */
 	public synchronized void write(int blockNumber, int blockOffset, byte[] buffer, int bufferOffset, int length) 
 			throws IOException {
-		long pointer = getBlockOffset(blockNumber) + blockOffset;
+		int pointer = getBlockOffset(blockNumber) + blockOffset;
 		int writable = blockSize - blockOffset;
 		int writeLength = length;
 		if(writable < length) {
@@ -337,7 +339,7 @@ public class NikeFS2BlockProvider {
 		}
 		if(mapped == true) {
 			MappedByteBuffer map = NikeFS2FileAccessMonitor.instance().requestMap(this);
-			map.position((int)pointer);
+			map.position(pointer);
 			map.put(buffer, bufferOffset, writeLength);
 		} else {
 			rafile.seek(pointer);
@@ -354,10 +356,10 @@ public class NikeFS2BlockProvider {
 	 */
 	public synchronized void write(int blockNumber, int blockOffset, int value) 
 			throws IOException {
-		long pointer = getBlockOffset(blockNumber) + blockOffset;
+		int pointer = getBlockOffset(blockNumber) + blockOffset;
 		if(mapped == true) {
 			MappedByteBuffer map = NikeFS2FileAccessMonitor.instance().requestMap(this);
-			map.position((int)pointer);
+			map.position(pointer);
 			map.put((byte)(value - 128));
 		} else {
 			rafile.seek(pointer);
