@@ -134,10 +134,8 @@ public class NikeFS2BlockProvider {
 			this.size = size;
 			this.blockSize = blockSize;
 			// create backing file, if not present yet
-			if(storage.exists()==false) {
-				if (!storage.createNewFile()) {
-					throw new IOException("Unable to create storage file " + storage);
-				}
+			if (!storage.exists() && !storage.createNewFile()) {
+				throw new IOException("Unable to create storage file " + storage);
 			}
 			// wrap backing file in random access file
 			this.file = storage;

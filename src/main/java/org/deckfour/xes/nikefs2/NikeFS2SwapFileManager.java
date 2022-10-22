@@ -59,6 +59,7 @@
  */
 package org.deckfour.xes.nikefs2;
 
+import java.nio.file.Files;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -153,8 +154,10 @@ public class NikeFS2SwapFileManager {
 			// create swap directory for this instance
 			File swapDir = File.createTempFile(SWAP_DIR_PREFIX, SWAP_DIR_SUFFIX, TMP_DIR);
 			// delete if created
-			if (!swapDir.delete()) {
-				log.warn("Failed to delete swap directory {}", swapDir);
+			try {
+				Files.delete(swapDir.toPath());
+			} catch (IOException e) {
+				log.warn("Failed to delete swap directory {}", swapDir, e);
 			}
 			// create lock file
 			File lockFile = new File(TMP_DIR, swapDir.getName() + LOCK_FILE_SUFFIX);
@@ -214,8 +217,10 @@ public class NikeFS2SwapFileManager {
 		} else {
 			deleted++;
 		}
-		if (!directory.delete()) {
-			log.warn("Unable to delete directory {}", directory);
+		try {
+			Files.delete(directory.toPath());
+		} catch (IOException e) {
+			log.warn("Unable to delete directory {}", directory, e);
 		}
 		return deleted;
 	}
