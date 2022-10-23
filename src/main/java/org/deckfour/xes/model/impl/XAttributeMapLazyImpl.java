@@ -225,10 +225,10 @@ public class XAttributeMapLazyImpl<T extends XAttributeMap> implements XAttribut
 	public synchronized XAttribute put(String key, XAttribute value) {
 		if(backingStore == null) {
 			try {
-				backingStore = backingStoreClass.newInstance();
-			} catch (Exception e) {
+				backingStore = backingStoreClass.getDeclaredConstructor().newInstance();
+			} catch (ReflectiveOperationException e) {
 				// Fuckup
-				throw new Error("Unable to create backing store", e);
+				throw new AssertionError("Unable to create backing store", e);
 			}
 		}
 		return backingStore.put(key, value);
@@ -241,10 +241,10 @@ public class XAttributeMapLazyImpl<T extends XAttributeMap> implements XAttribut
 		if(t.size() > 0) {
 			if(backingStore == null) {
 				try {
-					backingStore = backingStoreClass.newInstance();
-				} catch (Exception e) {
+					backingStore = backingStoreClass.getDeclaredConstructor().newInstance();
+				} catch (ReflectiveOperationException e) {
 					// Fuckup
-					throw new Error("Unable to create backing store", e);
+					throw new AssertionError("Unable to create backing store", e);
 				}
 			}
 			backingStore.putAll(t);
@@ -298,7 +298,7 @@ public class XAttributeMapLazyImpl<T extends XAttributeMap> implements XAttribut
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			// Fuckup!
-			throw new Error("Unable to clone", e);
+			throw new AssertionError("Superclass supports clone", e);
 		}
 	}
 

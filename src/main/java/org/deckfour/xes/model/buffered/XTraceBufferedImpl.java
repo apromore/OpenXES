@@ -545,7 +545,7 @@ public class XTraceBufferedImpl implements XTrace {
 		try {
 			clone = (XTraceBufferedImpl) super.clone();
 		} catch (CloneNotSupportedException e) {
-			throw new Error("Unable to clone trace", e);
+			throw new AssertionError("Superclass supports clone", e);
 		}
 		clone.attributes = (XAttributeMap) attributes.clone();
 		clone.events = (XFastEventList) events.clone();

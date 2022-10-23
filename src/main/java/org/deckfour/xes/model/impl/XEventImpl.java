@@ -173,7 +173,7 @@ public class XEventImpl implements XEvent {
 		try {
 			clone = (XEventImpl) super.clone();
 		} catch (CloneNotSupportedException e) {
-			throw new Error("Unable to clone event " + id, e);
+			throw new AssertionError("Superclass supports clone", e);
 		}
 		clone.id = XIDFactory.instance().createId();
 		clone.attributes = (XAttributeMap) attributes.clone();

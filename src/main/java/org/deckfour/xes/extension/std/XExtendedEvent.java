@@ -391,7 +391,7 @@ public class XExtendedEvent implements XEvent {
 			clone.original = (XEvent) original.clone();
 			return clone;
 		} catch (CloneNotSupportedException e) {
-			throw new Error("Event cannot be cloned: " + id, e);
+			throw new AssertionError("Superclass supports clone", e);
 		}
 	}
 

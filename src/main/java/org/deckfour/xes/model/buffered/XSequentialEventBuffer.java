@@ -501,7 +501,7 @@ public class XSequentialEventBuffer implements Cloneable {
 			try {
 				clone = (XSequentialEventBuffer) super.clone();
 			} catch (CloneNotSupportedException e) {
-				throw new Error("Unable to clone", e);
+				throw new AssertionError("Superclass supports clone", e);
 			}
 			try {
 				clone.storage = storage.copy();

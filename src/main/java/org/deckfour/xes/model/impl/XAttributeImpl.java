@@ -197,7 +197,7 @@ public abstract class XAttributeImpl implements XAttribute  {
 		try {
 			clone = (XAttributeImpl) super.clone();
 		} catch (CloneNotSupportedException e) {
-			throw new Error("Unable to clone attribute: " + key, e);
+			throw new AssertionError("Superclass supports clone", e);
 		}
 		if (attributes != null) {
 			clone.attributes = (XAttributeMap) getAttributes().clone();

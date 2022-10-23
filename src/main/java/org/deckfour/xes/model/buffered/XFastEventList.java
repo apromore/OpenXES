@@ -442,7 +442,7 @@ public class XFastEventList implements Cloneable {
 			return clone;
 
 		} catch (CloneNotSupportedException | IOException e) {
-			throw new Error("Unable to clone", e);
+			throw new AssertionError("Unable to clone", e);
 		}
 	}
 
