@@ -1,0 +1,33 @@
+# Maven build artifacts (i.e. object files)
+**/target/*
+**/build/*
+# IntelliJ IDEA artifacts, see https://intellij-support.jetbrains.com/hc/en-us/articles/206544839-How-to-manage-projects-under-Version-Control-Systems
+**/.idea/*
+**/*.iws
+*.iml
+*.crc
+**/*.crc
+
+# Eclipse IDE artifacts
+**/*.prefs
+**/*.project
+**/*.gitignore
+**/*.classpath
+**/*.factorypath
+**/dependency-reduced-pom.xml
+**/.settings/
+
+# macOS Finder artifacts
+**/.DS_Store
+**/bin/
+
+# vi editor artifacts
+**/*.swp
+
+# Gradle
+# Ignore Gradle project-specific cache directory
+.gradle/
+# Ignore Gradle build output directory
+**/build/*
+
+*.log
