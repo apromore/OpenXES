@@ -59,16 +59,17 @@ publishing {
 }
 
 release {
-	failOnCommitNeeded = false
+	failOnCommitNeeded = true
 	failOnUnversionedFiles = false
 	failOnSnapshotDependencies = true
+	pushReleaseVersionBranch = 'main'
 
 	scmAdapters = [
 			net.researchgate.release.GitAdapter
 	]
 
 	git {
-		requireBranch.set('main')
+		requireBranch.set('')
 		pushToRemote.set('origin')
 		pushToBranchPrefix.set('')
 		commitVersionFileOnly.set(false)
