@@ -15,9 +15,16 @@ repositories {
 	mavenCentral()
 
 	maven {
-		url = uri('https://raw.github.com/apromore/ApromoreCore_SupportLibs/master/mvn-repo/')
+		credentials {
+			username System.properties['APROMORE_DEV_USERNAME'] ?: System.env['APROMORE_DEV_USERNAME']
+			password System.properties['APROMORE_DEV_PASSWORD'] ?: System.env['APROMORE_DEV_PASSWORD']
+		}
+		url = uri('https://nexus.apromore.org/repository/apromore-proprietary-deps/')
+		metadataSources {
+			mavenPom()
+			artifact()
+		}
 	}
-
 }
 
 dependencies {
