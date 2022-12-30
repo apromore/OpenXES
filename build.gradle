@@ -16,10 +16,13 @@ repositories {
 
 	maven {
 		credentials {
-			username System.properties['APROMORE_DEV_USERNAME'] ?: System.env['APROMORE_DEV_USERNAME']
-			password System.properties['APROMORE_DEV_PASSWORD'] ?: System.env['APROMORE_DEV_PASSWORD']
+			username System.properties['APROMORE_NEXUS_USERNAME'] ?: System.env['APROMORE_NEXUS_USERNAME']
+			password System.properties['APROMORE_NEXUS_PASSWORD'] ?: System.env['APROMORE_NEXUS_PASSWORD']
 		}
-		url = uri('https://nexus.apromore.org/repository/apromore-proprietary-deps/')
+		url = System.properties['APROMORE_NEXUS_RELEASE_REPO']
+				?: System.env['APROMORE_NEXUS_RELEASE_REPO']
+				?: uri('https://nexus.apromore.org/repository/apromore-proprietary-deps/')
+
 		metadataSources {
 			mavenPom()
 			artifact()
@@ -28,13 +31,15 @@ repositories {
 }
 
 dependencies {
-	api 'org.eclipse.collections:eclipse-collections:10.4.0'
-	implementation 'com.thoughtworks.xstream:xstream:1.4.19'
-	implementation 'javax.xml.bind:jaxb-api:2.3.1'
-	implementation 'org.deckfour:spex:1.0'
-	implementation 'com.esotericsoftware:kryo:4.0.2'
-	implementation 'com.google.guava:guava:30.1.1-jre'
-	implementation 'org.springframework.boot:spring-boot-starter-logging:2.6.6'
+	api platform('org.apromore:ApromoreEE-BOM:1.0.0')
+
+	api 'org.eclipse.collections:eclipse-collections'
+	implementation 'com.thoughtworks.xstream:xstream'
+	implementation 'javax.xml.bind:jaxb-api'
+	implementation 'org.deckfour:spex'
+	implementation 'com.esotericsoftware:kryo'
+	implementation 'com.google.guava:guava'
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
 }
 
 tasks.named('jar') {
@@ -55,11 +60,11 @@ publishing {
 		maven {
 			name = 'apromoreRepo'
 			credentials(PasswordCredentials) {
-				username System.properties['APROMORE_DEV_USERNAME'] ?: System.env['APROMORE_DEV_USERNAME']
-				password System.properties['APROMORE_DEV_PASSWORD'] ?: System.env['APROMORE_DEV_PASSWORD']
+				username System.properties['APROMORE_NEXUS_USERNAME'] ?: System.env['APROMORE_NEXUS_USERNAME']
+				password System.properties['APROMORE_NEXUS_PASSWORD'] ?: System.env['APROMORE_NEXUS_PASSWORD']
 			}
-			def releasesRepoUrl = 'https://nexus.apromore.org/repository/apromore-proprietary-deps/'
-			def snapshotsRepoUrl = 'https://nexus.apromore.org/repository/apromore-proprietary-snapshot-deps/'
+			def releasesRepoUrl = System.properties['APROMORE_NEXUS_RELEASE_REPO'] ?: System.env['APROMORE_NEXUS_RELEASE_REPO']
+			def snapshotsRepoUrl = System.properties['APROMORE_NEXUS_SNAPSHOT_REPO'] ?: System.env['APROMORE_NEXUS_SNAPSHOT_REPO']
 			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 		}
 	}
@@ -86,5 +91,5 @@ release {
 
 //hooks provided: beforeReleaseBuild which runs before build and
 // afterReleaseBuild which runs afterwards
-publishMavenPublicationToApromoreRepoRepository.dependsOn clean
-afterReleaseBuild.dependsOn publishMavenPublicationToApromoreRepoRepository
+publish.dependsOn clean
+afterReleaseBuild.dependsOn publish
