@@ -16,10 +16,13 @@ repositories {
 
 	maven {
 		credentials {
-            username System.properties['APROMORE_NEXUS_USERNAME'] ?: System.env['APROMORE_NEXUS_USERNAME']
-            password System.properties['APROMORE_NEXUS_PASSWORD'] ?: System.env['APROMORE_NEXUS_PASSWORD']
+			username System.properties['APROMORE_NEXUS_USERNAME'] ?: System.env['APROMORE_NEXUS_USERNAME']
+			password System.properties['APROMORE_NEXUS_PASSWORD'] ?: System.env['APROMORE_NEXUS_PASSWORD']
 		}
-        url = System.properties['APROMORE_NEXUS_RELEASE_REPO'] ?: System.env['APROMORE_NEXUS_RELEASE_REPO']
+		url = System.properties['APROMORE_NEXUS_RELEASE_REPO']
+				?: System.env['APROMORE_NEXUS_RELEASE_REPO']
+				?: uri('https://nexus.apromore.org/repository/apromore-proprietary-deps/')
+
 		metadataSources {
 			mavenPom()
 			artifact()
@@ -28,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    api platform('org.apromore:ApromoreEE-BOM:1.0.0')
+	api platform('org.apromore:ApromoreEE-BOM:1.0.0')
 
 	api 'org.eclipse.collections:eclipse-collections'
 	implementation 'com.thoughtworks.xstream:xstream'
@@ -54,16 +57,16 @@ publishing {
 	}
 
 	repositories {
-        maven {
-            name = 'apromoreRepo'
-            credentials(PasswordCredentials) {
-                username System.properties['APROMORE_NEXUS_USERNAME'] ?: System.env['APROMORE_NEXUS_USERNAME']
-                password System.properties['APROMORE_NEXUS_PASSWORD'] ?: System.env['APROMORE_NEXUS_PASSWORD']
-            }
-            def releasesRepoUrl = System.properties['APROMORE_NEXUS_RELEASE_REPO'] ?: System.env['APROMORE_NEXUS_RELEASE_REPO']
-            def snapshotsRepoUrl = System.properties['APROMORE_NEXUS_SNAPSHOT_REPO'] ?: System.env['APROMORE_NEXUS_SNAPSHOT_REPO']
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-        }
+		maven {
+			name = 'apromoreRepo'
+			credentials(PasswordCredentials) {
+				username System.properties['APROMORE_NEXUS_USERNAME'] ?: System.env['APROMORE_NEXUS_USERNAME']
+				password System.properties['APROMORE_NEXUS_PASSWORD'] ?: System.env['APROMORE_NEXUS_PASSWORD']
+			}
+			def releasesRepoUrl = System.properties['APROMORE_NEXUS_RELEASE_REPO'] ?: System.env['APROMORE_NEXUS_RELEASE_REPO']
+			def snapshotsRepoUrl = System.properties['APROMORE_NEXUS_SNAPSHOT_REPO'] ?: System.env['APROMORE_NEXUS_SNAPSHOT_REPO']
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+		}
 	}
 }
 
